@@ -1,60 +1,53 @@
 <script>
-
 	//import Global CSS from the svelte boilerplate
 	//contains Figma color vars, spacing vars, utility classes and more
-	import { GlobalCSS } from 'figma-plugin-ds-svelte';
+	import { GlobalCSS } from "figma-plugin-ds-svelte";
+	import { Label, Section } from "figma-plugin-ds-svelte";
 
-	//import some Svelte Figma UI components
-	import { Button, Input, Label, SelectMenu } from 'figma-plugin-ds-svelte';
+	import { APCAcontrast } from "./APCAonly.98e_d12e.js";
 
-	//menu items, this is an array of objects to populate to our select menus
-	let menuItems = [
-        { 'value': 'rectangle', 'label': 'Rectangle', 'group': null, 'selected': false },
-        { 'value': 'triangle', 'label': 'Triangle ', 'group': null, 'selected': false },
-        { 'value': 'circle', 'label': 'Circle', 'group': null, 'selected': false }
-	];
+	$: foreground = "#ffffff";
+	$: background = "#000000";
+	$: contrast = 0;
 
-	var disabled = true;
-	var selectedShape;
-	var count = 5;
-
-	//this is a reactive variable that will return false when a value is selected from
-	//the select menu, its value is bound to the primary buttons disabled prop
-	$: disabled = selectedShape === null;
-
-	function createShapes() {
-		parent.postMessage({ pluginMessage: { 
-			'type': 'create-shapes', 
-			'count': count,
-			'shape': selectedShape.value
-		} }, '*');
+	function convertHexColor(color) {
+		return "0x" + color.substring(1);
 	}
 
-	function cancel() {
-		parent.postMessage({ pluginMessage: { 'type': 'cancel' } }, '*')
+	function calculateContrast() {
+		contrast = Math.round(
+			APCAcontrast(
+				convertHexColor(foreground),
+				convertHexColor(background)
+			)
+		);
 	}
-
 </script>
 
-
 <div class="wrapper p-xxsmall">
+	<p>{contrast}</p>
 
-	<Label>Shape</Label>
-	<SelectMenu bind:menuItems={menuItems} bind:value={selectedShape} class="mb-xxsmall"/>
-	
-	<Label>Count</Label>
-	<Input iconText="#" bind:value={count} class="mb-xxsmall"/>
+	<Section>Foreground</Section>
+	<input
+		type="color"
+		name="foreground"
+		id="foreground"
+		bind:value={foreground}
+		on:input={() => calculateContrast()}
+	/>
 
-	<div class="flex p-xxsmall mb-xsmall">
-	<Button on:click={cancel} variant="secondary" class="mr-xsmall">Cancel</Button>
-	<Button on:click={createShapes} bind:disabled={disabled}>Create shapes</Button>
-	</div>
-
+	<Section>Background</Section>
+	<input
+		type="color"
+		name="background"
+		id="background"
+		bind:value={background}
+		on:input={() => calculateContrast()}
+	/>
 </div>
 
-
 <style>
-
-/* Add additional global or scoped styles here */
-
+	input {
+		width: 100%;
+	}
 </style>
