@@ -22,6 +22,30 @@
 			)
 		);
 	}
+
+	function RGBToHex(color) {
+		let r = Math.round(color.r * 255);
+		let g = Math.round(color.g * 255);
+		let b = Math.round(color.b * 255);
+		r = r.toString(16);
+		g = g.toString(16);
+		b = b.toString(16);
+
+		if (r.length == 1) r = "0" + r;
+		if (g.length == 1) g = "0" + g;
+		if (b.length == 1) b = "0" + b;
+
+		return "0x" + r + g + b;
+	}
+
+	onmessage = (event) => {
+		contrast = Math.round(
+			APCAcontrast(
+				RGBToHex(event.data.pluginMessage.value),
+				convertHexColor(background)
+			)
+		);
+	};
 </script>
 
 <div class="wrapper p-xxsmall">

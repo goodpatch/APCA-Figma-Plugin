@@ -10,6 +10,12 @@ figma.showUI(__html__, { width: 232, height: 208 });
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the
 // posted message.
+figma.on("selectionchange", () => {
+    figma.ui.postMessage({
+        type: 'selectionChange',
+        value: figma.currentPage.selection[0].fills[0].color
+    });
+});
 figma.ui.onmessage = msg => {
     // One way of distinguishing between different types of messages sent from
     // your HTML page is to use an object with a "type" property like this.
