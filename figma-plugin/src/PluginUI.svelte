@@ -1,34 +1,37 @@
 <script>
 	import { GlobalCSS } from "figma-plugin-ds-svelte";
-	import { Label, Section } from "figma-plugin-ds-svelte";
+	import { Label, Section, Input } from "figma-plugin-ds-svelte";
 
 	import { APCAcontrast } from "./APCAonly.98e_d12e.js";
 
-	$: foreground = "#ffffff";
+	$: foreground = "#FFFFFF";
 	$: background = "#E5E5E5";
 	$: contrast = 0;
 
-	function convertHexColor(color) {
+	function HexTo0x(color) {
 		return "0x" + color.substring(1);
 	}
 
 	function calculateContrast() {
 		contrast = Math.round(
-			APCAcontrast(
-				convertHexColor(foreground),
-				convertHexColor(background)
-			)
+			APCAcontrast(HexTo0x(foreground), HexTo0x(background))
 		);
 	}
 
-	function RGBToHex(color) {
-		let r = Math.round(color.r * 255).toString(16);
-		let g = Math.round(color.g * 255).toString(16);
-		let b = Math.round(color.b * 255).toString(16);
+	function ChannelToHex(channel) {
+		channel = Math.round(channel * 255)
+			.toString(16)
+			.toUpperCase();
 
-		if (r.length == 1) r = "0" + r;
-		if (g.length == 1) g = "0" + g;
-		if (b.length == 1) b = "0" + b;
+		if (channel.length == 1) channel = "0" + channel;
+
+		return channel;
+	}
+
+	function RGBToHex(color) {
+		let r = ChannelToHex(color.r);
+		let g = ChannelToHex(color.g);
+		let b = ChannelToHex(color.b);
 
 		return "#" + r + g + b;
 	}
@@ -41,30 +44,46 @@
 
 <div class="wrapper p-xxsmall">
 	<p>{contrast}</p>
-
+</div>
+<div>
 	<Section>Foreground</Section>
-	<input
-		type="color"
-		name="foreground"
-		id="foreground"
-		bind:value={foreground}
-		on:input={() => calculateContrast()}
-	/>
-	<input type="text" bind:value={foreground} />
+	<div class="wrapper flex align-items-center p-xxsmall">
+		<input
+			type="color"
+			name="foreground"
+			id="foreground"
+			bind:value={foreground}
+			on:input={() => calculateContrast()}
+			class="mr-xxxsmall"
+		/>
+		<Input bind:value={foreground} class="flex-grow" />
+	</div>
 
 	<Section>Background</Section>
-	<input
-		type="color"
-		name="background"
-		id="background"
-		bind:value={background}
-		on:input={() => calculateContrast()}
-	/>
-	<input type="text" bind:value={background} />
+	<div class="wrapper flex align-items-center p-xxsmall">
+		<input
+			type="color"
+			name="background"
+			id="background"
+			bind:value={background}
+			on:input={() => calculateContrast()}
+			class="mr-xxxsmall"
+		/>
+		<Input bind:value={background} class="flex-grow" />
+	</div>
 </div>
 
 <style>
-	input {
-		width: 100%;
+	input[type="color"] {
+		-webkit-appearance: none;
+		border: none;
+		width: 16px;
+		height: 16px;
+	}
+	input[type="color"]::-webkit-color-swatch-wrapper {
+		padding: 0;
+	}
+	input[type="color"]::-webkit-color-swatch {
+		border: none;
 	}
 </style>
