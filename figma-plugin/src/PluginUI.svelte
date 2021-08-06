@@ -1,10 +1,11 @@
 <script>
 	import { GlobalCSS } from "figma-plugin-ds-svelte";
 	import { Label, Section, Input } from "figma-plugin-ds-svelte";
+	import ColorPicker from "./ColorPicker.svelte";
 
 	import { APCAcontrast } from "./APCAonly.98e_d12e.js";
 
-	$: foreground = "#FFFFFF";
+	$: foreground = "#000000";
 	$: background = "#E5E5E5";
 	$: contrast = 0;
 
@@ -37,7 +38,11 @@
 	}
 
 	onmessage = (event) => {
-		foreground = RGBToHex(event.data.pluginMessage.value);
+		foreground = RGBToHex(event.data.pluginMessage.value.foreground);
+		if (event.data.pluginMessage.value.background) {
+			background = RGBToHex(event.data.pluginMessage.value.background);
+		}
+
 		calculateContrast();
 	};
 </script>
@@ -47,7 +52,7 @@
 </div>
 <div>
 	<Section>Foreground</Section>
-	<div class="wrapper flex align-items-center p-xxsmall">
+	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
 		<input
 			type="color"
 			name="foreground"
@@ -60,7 +65,7 @@
 	</div>
 
 	<Section>Background</Section>
-	<div class="wrapper flex align-items-center p-xxsmall">
+	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
 		<input
 			type="color"
 			name="background"
@@ -79,6 +84,7 @@
 		border: none;
 		width: 16px;
 		height: 16px;
+		padding: 0px;
 	}
 	input[type="color"]::-webkit-color-swatch-wrapper {
 		padding: 0;

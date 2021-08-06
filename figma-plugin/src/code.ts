@@ -11,10 +11,31 @@ figma.showUI(__html__, { width: 256, height: 256 });
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the
 // posted message.
+let foreground = null;
+let background = null;
 figma.on("selectionchange", () => {
+	let selection = figma.currentPage.selection[0];
+
+	if (!selection) {
+		return;
+	}
+
+	if ("parent" in selection) {
+		let parent = figma.currentPage.selection[0].parent;
+		if ("fills" in parent) {
+			background = figma.currentPage.selection[0].parent.fills[0].color
+		}
+		else if ("backgrounds" in parent) {
+			background = figma.currentPage.selection[0].parent.backgrounds[0].color
+		}
+
+	}
+
 	figma.ui.postMessage({
-		type: 'selectionChange',
-		value: figma.currentPage.selection[0].fills[0].color
+		value: {
+			foreground: figma.currentPage.selection[0].fills[0].color,
+			background: background
+		}
 	})
 })
 
