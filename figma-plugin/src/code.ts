@@ -13,6 +13,8 @@ figma.showUI(__html__, { width: 256, height: 256 });
 // posted message.
 let foreground = null;
 let background = null;
+let foregroundName = null;
+let backgroundName = null;
 figma.on("selectionchange", () => {
 	let selection = figma.currentPage.selection;
 
@@ -21,23 +23,32 @@ figma.on("selectionchange", () => {
 	}
 
 	foreground = CheckColor(selection[0]);
+	foregroundName = selection[0].name;
+
 
 	if (selection.length === 1) {
-		CheckParent(selection[0]);
+		CheckParent(selection[0])
 	}
 	else {
-		background = CheckColor(selection[1]);
+		background = CheckColor(selection[1])
+		backgroundName = selection[1].name
 	}
 
 	figma.ui.postMessage({
 		value: {
 			foreground: foreground,
-			background: background
+			background: background,
+			foregroundName: foregroundName,
+			backgroundName: backgroundName
 		}
 	})
 })
 
 function CheckColor(element) {
+	if (!element || !element.fills.length) {
+		return
+	}
+
 	if (element.fills[0].type === "SOLID") {
 		return element.fills[0].color
 	}
@@ -51,7 +62,8 @@ function CheckColor(element) {
 
 function CheckParent(element) {
 	if ("parent" in element) {
-		let parent = element.parent;
+		let parent = element.parent
+		backgroundName = parent.name
 		if ("fills" in parent && parent.fills.length) {
 			background = parent.fills[0].color
 		}
