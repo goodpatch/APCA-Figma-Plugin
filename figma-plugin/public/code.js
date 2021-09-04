@@ -10,13 +10,13 @@ figma.showUI(__html__, { width: 256, height: 256 });
 let background = null;
 figma.on("selectionchange", () => {
     let selection = figma.currentPage.selection[0];
-    if (!selection) {
+    if (!selection || !selection.fills.length) {
         return;
     }
     CheckParent(selection);
     figma.ui.postMessage({
         value: {
-            foreground: figma.currentPage.selection[0].fills[0].color,
+            foreground: selection.fills[0].color,
             background: background
         }
     });

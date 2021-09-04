@@ -16,7 +16,7 @@ let background = null;
 figma.on("selectionchange", () => {
 	let selection = figma.currentPage.selection[0];
 
-	if (!selection) {
+	if (!selection || !selection.fills.length) {
 		return;
 	}
 
@@ -24,7 +24,7 @@ figma.on("selectionchange", () => {
 
 	figma.ui.postMessage({
 		value: {
-			foreground: figma.currentPage.selection[0].fills[0].color,
+			foreground: selection.fills[0].color,
 			background: background
 		}
 	})
