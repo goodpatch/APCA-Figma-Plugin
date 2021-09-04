@@ -7,16 +7,29 @@
 // full browser enviroment (see documentation).
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__, { width: 256, height: 256 });
+// Calls to "parent.postMessage" from within the HTML page will trigger this
+// callback. The callback will be passed the "pluginMessage" property of the
+// posted message.
+let foreground = null;
 let background = null;
 figma.on("selectionchange", () => {
     let selection = figma.currentPage.selection[0];
     if (!selection || !selection.fills.length) {
         return;
     }
+    if (selection.fills[0].type === "SOLID") {
+        foreground = selection.fills[0].color;
+    }
+    else if (selection.fills[0].type === "GRADIENT_LINEAR") {
+        foreground = selection.fills[0].gradientStops[0].color;
+    }
+    else {
+        return;
+    }
     CheckParent(selection);
     figma.ui.postMessage({
         value: {
-            foreground: selection.fills[0].color,
+            foreground: foreground,
             background: background
         }
     });

@@ -17,14 +17,24 @@ figma.on("selectionchange", () => {
 	let selection = figma.currentPage.selection[0];
 
 	if (!selection || !selection.fills.length) {
-		return;
+		return
+	}
+
+	if (selection.fills[0].type === "SOLID") {
+		foreground = selection.fills[0].color
+	}
+	else if (selection.fills[0].type === "GRADIENT_LINEAR") {
+		foreground = selection.fills[0].gradientStops[0].color
+	}
+	else {
+		return
 	}
 
 	CheckParent(selection);
 
 	figma.ui.postMessage({
 		value: {
-			foreground: selection.fills[0].color,
+			foreground: foreground,
 			background: background
 		}
 	})
