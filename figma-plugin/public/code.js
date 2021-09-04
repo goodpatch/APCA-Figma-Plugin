@@ -13,20 +13,17 @@ figma.showUI(__html__, { width: 256, height: 256 });
 let foreground = null;
 let background = null;
 figma.on("selectionchange", () => {
-    let selection = figma.currentPage.selection[0];
-    if (!selection || !selection.fills.length) {
+    let selection = figma.currentPage.selection;
+    if (!selection[0] || !selection[0].fills.length) {
         return;
     }
-    if (selection.fills[0].type === "SOLID") {
-        foreground = selection.fills[0].color;
-    }
-    else if (selection.fills[0].type === "GRADIENT_LINEAR") {
-        foreground = selection.fills[0].gradientStops[0].color;
+    foreground = CheckColor(selection[0]);
+    if (selection.length === 1) {
+        CheckParent(selection[0]);
     }
     else {
-        return;
+        background = CheckColor(selection[1]);
     }
-    CheckParent(selection);
     figma.ui.postMessage({
         value: {
             foreground: foreground,
@@ -34,6 +31,17 @@ figma.on("selectionchange", () => {
         }
     });
 });
+function CheckColor(element) {
+    if (element.fills[0].type === "SOLID") {
+        return element.fills[0].color;
+    }
+    else if (element.fills[0].type === "GRADIENT_LINEAR") {
+        return element.fills[0].gradientStops[0].color;
+    }
+    else {
+        return;
+    }
+}
 function CheckParent(element) {
     if ("parent" in element) {
         let parent = element.parent;
