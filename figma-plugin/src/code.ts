@@ -20,16 +20,7 @@ figma.on("selectionchange", () => {
 		return;
 	}
 
-	if ("parent" in selection) {
-		let parent = figma.currentPage.selection[0].parent;
-		if ("fills" in parent) {
-			background = figma.currentPage.selection[0].parent.fills[0].color
-		}
-		else if ("backgrounds" in parent) {
-			background = figma.currentPage.selection[0].parent.backgrounds[0].color
-		}
-
-	}
+	CheckParent(selection);
 
 	figma.ui.postMessage({
 		value: {
@@ -38,6 +29,22 @@ figma.on("selectionchange", () => {
 		}
 	})
 })
+
+function CheckParent(element) {
+	if ("parent" in element) {
+		let parent = element.parent;
+		if ("fills" in parent && parent.fills.length) {
+			background = parent.fills[0].color
+		}
+		else if ("backgrounds" in parent && parent.backgrounds.length) {
+			background = parent.backgrounds[0].color
+		}
+		else {
+			CheckParent(parent);
+		}
+
+	}
+}
 
 figma.ui.onmessage = msg => {
 	// One way of distinguishing between different types of messages sent from
