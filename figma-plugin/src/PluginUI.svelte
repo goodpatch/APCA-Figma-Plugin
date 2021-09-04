@@ -9,14 +9,14 @@
 	$: background = "#E5E5E5";
 	$: contrast = 0;
 
-	function HexTo0x(color) {
-		return "0x" + color.substring(1);
-	}
-
 	function calculateContrast() {
 		contrast = Math.round(
 			APCAcontrast(HexTo0x(foreground), HexTo0x(background))
 		);
+	}
+
+	function HexTo0x(color) {
+		return "0x" + color.substring(1);
 	}
 
 	function ChannelToHex(channel) {
