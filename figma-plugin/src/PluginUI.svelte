@@ -8,6 +8,8 @@
 	$: foreground = "#000000";
 	$: background = "#E5E5E5";
 	$: contrast = 0;
+	$: foregroundName = "";
+	$: backgroundName = "";
 
 	function calculateContrast() {
 		contrast = Math.round(
@@ -39,6 +41,8 @@
 
 	onmessage = (event) => {
 		foreground = RGBToHex(event.data.pluginMessage.value.foreground);
+		foregroundName = event.data.pluginMessage.value.foregroundName;
+		backgroundName = event.data.pluginMessage.value.backgroundName;
 		if (event.data.pluginMessage.value.background) {
 			background = RGBToHex(event.data.pluginMessage.value.background);
 		}
@@ -52,6 +56,7 @@
 </div>
 <div>
 	<Section>Foreground</Section>
+	<Label>{foregroundName}</Label>
 	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
 		<input
 			type="color"
@@ -65,6 +70,7 @@
 	</div>
 
 	<Section>Background</Section>
+	<Label>{backgroundName}</Label>
 	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
 		<input
 			type="color"
@@ -90,6 +96,6 @@
 		padding: 0;
 	}
 	input[type="color"]::-webkit-color-swatch {
-		border: none;
+		border: 1px solid rgba(0, 0, 0, 0.08);
 	}
 </style>
