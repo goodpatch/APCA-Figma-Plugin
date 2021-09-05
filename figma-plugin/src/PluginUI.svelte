@@ -7,6 +7,7 @@
 		Button,
 		Icon,
 		IconSwap,
+		Type,
 	} from "figma-plugin-ds-svelte";
 	import ColorPicker from "./ColorPicker.svelte";
 
@@ -87,7 +88,7 @@
 		<Label>Background</Label>
 	</div>
 	<Section>{backgroundName}</Section>
-	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
+	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xxsmall">
 		<input
 			type="color"
 			name="background"
@@ -99,7 +100,7 @@
 		<Input bind:value={background} class="flex-grow" />
 	</div>
 </div>
-<div class="wrapper p-xxsmall flex">
+<div class="wrapper pl-xxsmall pr-xxsmall pb-xxsmall flex">
 	<Button
 		on:click={swapColors}
 		variant="secondary"
@@ -108,6 +109,23 @@
 		<Icon iconName={IconSwap} color="black" />
 		Swap colors
 	</Button>
+</div>
+<div class="divider" />
+<div class="wrapper p-xxsmall mb-xsmall">
+	<Type>
+		Learn more about
+		<a href="https://global.goodpatch.com/" rel="noopener" target="_blank"
+			>Goodpatch
+		</a>
+		and
+		<a
+			href="https://w3c.github.io/silver/guidelines/explainers/visualContrast.html"
+			rel="noopener"
+			target="_blank"
+		>
+			Advanced Perceptual Contrast Algorithm (APCA)
+		</a>
+	</Type>
 </div>
 
 <style>
@@ -127,5 +145,12 @@
 
 	.label-container :global(div) {
 		height: 16px;
+	}
+
+	.divider {
+		background-color: var(--silver);
+		display: block;
+		height: 1px;
+		margin: 8px 0 7px 0;
 	}
 </style>
