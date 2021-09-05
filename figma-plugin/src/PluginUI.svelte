@@ -1,15 +1,22 @@
 <script>
 	import { GlobalCSS } from "figma-plugin-ds-svelte";
-	import { Label, Section, Input } from "figma-plugin-ds-svelte";
+	import {
+		Label,
+		Section,
+		Input,
+		Button,
+		Icon,
+		IconSwap,
+	} from "figma-plugin-ds-svelte";
 	import ColorPicker from "./ColorPicker.svelte";
 
 	import { APCAcontrast } from "./APCAonly.98e_d12e.js";
 
 	$: foreground = "#000000";
-	$: background = "#E5E5E5";
+	$: background = "#000000";
 	$: contrast = 0;
-	$: foregroundName = "";
-	$: backgroundName = "";
+	$: foregroundName = "No layer selected";
+	$: backgroundName = "No layer selected";
 
 	function calculateContrast() {
 		contrast = Math.round(
@@ -39,6 +46,11 @@
 		return "#" + r + g + b;
 	}
 
+	function swapColors() {
+		[foreground, background] = [background, foreground];
+		calculateContrast();
+	}
+
 	onmessage = (event) => {
 		foreground = RGBToHex(event.data.pluginMessage.value.foreground);
 		foregroundName = event.data.pluginMessage.value.foregroundName;
@@ -55,7 +67,9 @@
 	<p>{contrast}</p>
 </div>
 <div>
-	<Label>Foreground</Label>
+	<div class="label-container">
+		<Label>Foreground</Label>
+	</div>
 	<Section>{foregroundName}</Section>
 	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
 		<input
@@ -69,7 +83,9 @@
 		<Input bind:value={foreground} class="flex-grow" />
 	</div>
 
-	<Label class="label-s">Background</Label>
+	<div class="label-container">
+		<Label>Background</Label>
+	</div>
 	<Section>{backgroundName}</Section>
 	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
 		<input
@@ -82,6 +98,16 @@
 		/>
 		<Input bind:value={background} class="flex-grow" />
 	</div>
+</div>
+<div class="wrapper p-xxsmall flex">
+	<Button
+		on:click={swapColors}
+		variant="secondary"
+		class="flex-grow justify-content-center"
+	>
+		<Icon iconName={IconSwap} color="black" />
+		Swap colors
+	</Button>
 </div>
 
 <style>
@@ -99,7 +125,7 @@
 		border: 1px solid rgba(0, 0, 0, 0.08);
 	}
 
-	.label-s {
+	.label-container :global(div) {
 		height: 16px;
 	}
 </style>
