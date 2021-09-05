@@ -8,6 +8,7 @@
 		Icon,
 		IconSwap,
 		Type,
+		IconButton,
 	} from "figma-plugin-ds-svelte";
 	import ColorPicker from "./ColorPicker.svelte";
 
@@ -52,6 +53,13 @@
 		calculateContrast();
 	}
 
+	function openLink() {
+		window.open(
+			"https://w3c.github.io/silver/guidelines/explainers/visualContrast.html",
+			"_blank"
+		);
+	}
+
 	onmessage = (event) => {
 		foreground = RGBToHex(event.data.pluginMessage.value.foreground);
 		foregroundName = event.data.pluginMessage.value.foregroundName;
@@ -64,8 +72,15 @@
 	};
 </script>
 
-<div class="wrapper p-xxsmall">
-	<p>{contrast}</p>
+<div class="banner pr-xxsmall pl-xxsmall pt-xxxsmall pb-xxxsmall">
+	<Type inverse="true" color="white">Beta version</Type>
+</div>
+
+<div class="wrapper p-xxsmall flex justify-content-between">
+	<Type size="xlarge" weight="bold" class="flex align-items-center"
+		>{contrast}</Type
+	>
+	<IconButton iconText="" on:click={openLink} />
 </div>
 <div>
 	<div class="label-container">
@@ -111,7 +126,7 @@
 	</Button>
 </div>
 <div class="divider" />
-<div class="wrapper p-xxsmall mb-xsmall">
+<div class="wrapper pl-xxsmall pr-xxsmall">
 	<Type>
 		Learn more about
 		<a href="https://global.goodpatch.com/" rel="noopener" target="_blank"
@@ -129,6 +144,9 @@
 </div>
 
 <style>
+	.banner {
+		background-color: var(--red);
+	}
 	input[type="color"] {
 		-webkit-appearance: none;
 		border: none;
