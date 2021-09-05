@@ -15,10 +15,19 @@ let foreground = null;
 let background = null;
 let foregroundName = null;
 let backgroundName = null;
+
+figma.on("run", () => {
+	CheckColors(figma.currentPage.selection)
+})
+
 figma.on("selectionchange", () => {
-	let selection = figma.currentPage.selection;
+	CheckColors(figma.currentPage.selection)
+})
+
+function CheckColors(selection) {
 
 	if (!selection[0] || !selection[0].fills.length) {
+		figma.notify("Select one or two objects with solid or linear gradient fill")
 		return
 	}
 
@@ -42,10 +51,11 @@ figma.on("selectionchange", () => {
 			backgroundName: backgroundName
 		}
 	})
-})
+}
 
 function CheckColor(element) {
 	if (!element || !element.fills.length) {
+		figma.notify("Select one or two objects with solid or linear gradient fill")
 		return
 	}
 
@@ -56,6 +66,7 @@ function CheckColor(element) {
 		return element.fills[0].gradientStops[0].color
 	}
 	else {
+		figma.notify("Try selecting a different layer")
 		return
 	}
 }

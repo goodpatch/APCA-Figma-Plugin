@@ -55,8 +55,8 @@
 	<p>{contrast}</p>
 </div>
 <div>
-	<Section>Foreground</Section>
-	<Label>{foregroundName}</Label>
+	<Label>Foreground</Label>
+	<Section>{foregroundName}</Section>
 	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
 		<input
 			type="color"
@@ -69,8 +69,8 @@
 		<Input bind:value={foreground} class="flex-grow" />
 	</div>
 
-	<Section>Background</Section>
-	<Label>{backgroundName}</Label>
+	<Label class="label-s">Background</Label>
+	<Section>{backgroundName}</Section>
 	<div class="flex align-items-center pr-xxsmall pl-xxsmall pb-xsmall">
 		<input
 			type="color"
@@ -97,5 +97,9 @@
 	}
 	input[type="color"]::-webkit-color-swatch {
 		border: 1px solid rgba(0, 0, 0, 0.08);
+	}
+
+	.label-s {
+		height: 16px;
 	}
 </style>
