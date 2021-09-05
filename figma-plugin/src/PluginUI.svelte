@@ -76,7 +76,12 @@
 	<Type inverse="true" color="white">Beta version</Type>
 </div>
 
-<div class="wrapper p-xxsmall flex justify-content-between">
+<div class="label-container pt-xxsmall">
+	<Label>Contrast</Label>
+</div>
+<div
+	class="wrapper pl-xxsmall pb-xsmall pr-xxsmall flex justify-content-between"
+>
 	<Type size="xlarge" weight="bold" class="flex align-items-center"
 		>{contrast}</Type
 	>
