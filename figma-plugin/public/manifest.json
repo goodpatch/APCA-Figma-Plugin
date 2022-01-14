@@ -1,10 +1,8 @@
 {
-  "name": "Advanced Contrast [Beta]",
+  "name": "Advanced Contrast",
   "id": "1016422249670821680",
   "api": "1.0.0",
   "main": "code.js",
   "ui": "index.html",
-  "editorType": [
-    "figma"
-  ]
+  "editorType": ["figma"]
 }
