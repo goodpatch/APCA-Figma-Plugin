@@ -10,9 +10,8 @@
 		Type,
 		IconButton,
 	} from "figma-plugin-ds-svelte";
-	import ColorPicker from "./ColorPicker.svelte";
 
-	import { APCAcontrast } from "./APCAonly.98e_d12e.js";
+	import { APCAcontrast, sRGBtoY, displayP3toY, colorParsley } from "apca-w3";
 
 	$: foreground = "#000000";
 	$: background = "#000000";
@@ -20,23 +19,11 @@
 	$: foregroundName = "No layer selected";
 	$: backgroundName = "No layer selected";
 
-	function calculateContrast() {
-		contrast = Math.round(
-			APCAcontrast(HexTo0x(foreground), HexTo0x(background))
-		);
-	}
-
-	function HexTo0x(color) {
-		return "0x" + color.substring(1);
-	}
-
 	function ChannelToHex(channel) {
 		channel = Math.round(channel * 255)
 			.toString(16)
 			.toUpperCase();
-
 		if (channel.length == 1) channel = "0" + channel;
-
 		return channel;
 	}
 
@@ -44,20 +31,12 @@
 		let r = ChannelToHex(color.r);
 		let g = ChannelToHex(color.g);
 		let b = ChannelToHex(color.b);
-
 		return "#" + r + g + b;
 	}
 
 	function swapColors() {
 		[foreground, background] = [background, foreground];
 		calculateContrast();
-	}
-
-	function openLink() {
-		window.open(
-			"https://w3c.github.io/silver/guidelines/explainers/visualContrast.html",
-			"_blank"
-		);
 	}
 
 	onmessage = (event) => {
@@ -67,9 +46,24 @@
 		if (event.data.pluginMessage.value.background) {
 			background = RGBToHex(event.data.pluginMessage.value.background);
 		}
-
 		calculateContrast();
 	};
+
+	function calculateContrast() {
+		contrast = Math.round(
+			APCAcontrast(
+				sRGBtoY(colorParsley(foreground)),
+				sRGBtoY(colorParsley(background))
+			)
+		);
+	}
+
+	function openLink() {
+		window.open(
+			"https://w3c.github.io/silver/guidelines/explainers/visualContrast.html",
+			"_blank"
+		);
+	}
 </script>
 
 <div class="banner pr-xxsmall pl-xxsmall pt-xxxsmall pb-xxxsmall">
